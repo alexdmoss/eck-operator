@@ -1,0 +1,35 @@
+---
+apiVersion: elasticsearch.k8s.elastic.co/v1alpha1
+kind: Elasticsearch
+metadata:
+  name: mw-elastic
+  namespace: elastic-search
+spec:
+  version: 7.2.0
+  nodes:
+  - nodeCount: 1
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+    # podTemplate:
+    #   metadata:
+    #     labels:
+    #       app: elasticsearch
+    #   spec:
+    #     containers:
+    #     - name: elasticsearch
+    #       resources:
+    #         limits:
+    #           memory: 0.5Gi
+    #           cpu: 100m
+    # volumeClaimTemplates:
+    # - metadata:
+    #    name: data
+    #   spec:
+    #     accessModes:
+    #     - ReadWriteOnce
+    #     resources:
+    #       requests:
+    #         storage: 10Gi
+    #     storageClassName: elasticsearch-ssd
