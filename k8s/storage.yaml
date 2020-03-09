@@ -2,10 +2,8 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: elasticsearch-ssd
-  namespace: elastic-search
+  name: elasticsearch
+  namespace: logging
 provisioner: kubernetes.io/gce-pd
-parameters:
-  type: pd-ssd
 allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer

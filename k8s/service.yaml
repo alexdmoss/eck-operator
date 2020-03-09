@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+  namespace: logging
+spec:
+  type: NodePort
+  selector:
+    kibana.k8s.elastic.co/name: mw
+  ports:
+    - port: 5601
+      name: http

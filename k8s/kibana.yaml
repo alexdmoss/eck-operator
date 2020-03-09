@@ -1,22 +1,22 @@
 ---
-apiVersion: kibana.k8s.elastic.co/v1alpha1
+apiVersion: kibana.k8s.elastic.co/v1
 kind: Kibana
 metadata:
-  name: mw-kibana
-  namespace: elastic-search
+  name: mw
+  namespace: logging
 spec:
-  version: 7.2.0
-  nodeCount: 1
+  version: 7.6.1
+  count: 1
   elasticsearchRef:
-    name: mw-elastic
-  # podTemplate:
-  #   metadata:
-  #     labels:
-  #       app: kibana
-  #   spec:
-  #     containers:
-  #     - name: kibana
-  #       resources:
-  #         limits:
-  #           memory: 0.25Gi
-  #           cpu: 100m
+    name: mw
+  podTemplate:
+    spec:
+      containers:
+      - name: kibana
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 0.2
+          limits:
+            memory: 512Mi
+            cpu: 0.5

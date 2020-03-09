@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana
+  namespace: logging
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - secretName: kibana-tls
+    hosts:
+    - kibana.alexos.dev
+  rules:
+  - host: kibana.alexos.dev
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kibana
+          servicePort: 5601

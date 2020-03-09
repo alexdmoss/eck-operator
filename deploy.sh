@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-kubectl apply -f ./k8s/elastic-search.yaml
+if [[ $(kubectl get ns | grep -c logging) -eq 0 ]]; then
+    kubectl create ns logging
+fi
+
+kubectl apply -f ./k8s/
