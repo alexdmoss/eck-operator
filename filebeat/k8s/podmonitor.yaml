@@ -1,0 +1,9 @@
+---
+kind: PodMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: filebeat
+spec:
+  podMetricsEndpoints:
+    - path: /metrics
+      targetPort: metrics

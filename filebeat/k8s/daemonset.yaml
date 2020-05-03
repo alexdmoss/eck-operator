@@ -1,0 +1,92 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: filebeat
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    spec:
+      serviceAccountName: filebeat
+      priorityClassName: high-priority
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - effect: NoExecute
+          operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - name: filebeat
+          image: docker.elastic.co/beats/filebeat:7.6.1
+          args:
+            - "-c"
+            - "/etc/filebeat.yml"
+            - "-e"
+          envFrom:
+            - configMapRef:
+                name: efk
+            - secretRef:
+                name: efk
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          securityContext:
+            runAsUser: 0
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/filebeat.yml
+              readOnly: true
+              subPath: filebeat.yml
+            - name: inputs
+              mountPath: /usr/share/filebeat/inputs.d
+              readOnly: true
+            - name: data
+              mountPath: /usr/share/filebeat/data
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+        - name: beatexporter
+          image: trustpilot/beat-exporter:0.1.2
+          args:
+            - -web.listen-address=0.0.0.0:9479
+            - -web.telemetry-path=/metrics
+          ports:
+            - containerPort: 9479
+              name: metrics
+              protocol: TCP
+          securityContext:
+            runAsUser: 0
+          resources:
+            limits:
+              cpu: 10m
+              memory: 100Mi
+            requests:
+              cpu: 1m
+              memory: 20Mi
+      volumes:
+        - name: config
+          configMap:
+            defaultMode: 0600
+            name: filebeat-config
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+        - name: inputs
+          configMap:
+            defaultMode: 0600
+            name: filebeat-inputs
+        # data folder stores a registry of read status for all files, so we don't send everything again on a Filebeat pod restart
+        - name: data
+          hostPath:
+            path: /var/lib/filebeat
+            type: DirectoryOrCreate
