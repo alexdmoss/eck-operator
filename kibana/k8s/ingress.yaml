@@ -18,5 +18,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: kibana
+              serviceName: mw-kb-http
               servicePort: 5601

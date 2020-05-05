@@ -5,10 +5,16 @@ if [[ $(kubectl get ns | grep -c logging) -eq 0 ]]; then
 fi
 
 echo "Installing elasticsearch"
-kubectl apply -f ./elastic/k8s/
+pushd $(dirname ${BASH_SOURCE[0]})/elastic/k8s/ > /dev/null
+kubectl apply -f .
+popd >/dev/null
 
 echo "Installing kibana"
-kubectl apply -f ./elastic/k8s/
+pushd $(dirname ${BASH_SOURCE[0]})/kibana/k8s/ > /dev/null
+kubectl apply -f .
+popd >/dev/null
 
 echo "Installing filebeat"
-kubectl apply -f ./filebeat/k8s/
+pushd $(dirname ${BASH_SOURCE[0]})/filebeat/k8s/ > /dev/null
+kustomize build . | kubectl apply -f -
+popd >/dev/null

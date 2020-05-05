@@ -18,3 +18,13 @@ kubectl delete elastic --all --all-namespaces
 kubectl delete -f operators/*.yaml
 kubectl delete validatingwebhookconfigurations validating-webhook-configuration
 ```
+
+## To Do
+
+- [ ] Backup/restore
+- [ ] Ingress / certs issue
+- [ ] Clean up irrelevant fields
+- [ ] Failed indexing in filebeat logs still there?
+- [ ] Restore beats exporter
+- [ ] Elastic --> Prometheus
+- [ ] Elastic as a Grafana datasource?
