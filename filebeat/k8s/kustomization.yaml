@@ -10,8 +10,6 @@ commonLabels:
 resources:
 - daemonset.yaml
 - podmonitor.yaml
-- psp.yaml
-- rbac.yaml
 # this one doesn't need a hash suffix as filebeat will reload the inputs config in place
 - filebeat-inputs.configmap.yaml
 

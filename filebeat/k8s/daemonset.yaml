@@ -23,11 +23,6 @@ spec:
             - "-c"
             - "/etc/filebeat.yml"
             - "-e"
-          envFrom:
-            - configMapRef:
-                name: efk
-            - secretRef:
-                name: efk
           env:
             - name: NODE_NAME
               valueFrom:
